@@ -1,0 +1,31 @@
+version: '2'
+services:
+  mariadb:
+    build: './mariadb'
+    environment:
+      - MARIADB_USER=bn_moodle
+      - MARIADB_DATABASE=moodle
+      - MARIADB_PASSWORD=changeit
+      - MARIADB_ROOT_PASSWORD=changeit
+    volumes:
+      - 'mariadb_data:/bitnami'
+  moodle:
+    build: './moodle'
+    environment:
+      - MARIADB_HOST=mariadb
+      - MARIADB_PORT_NUMBER=3306
+      - MOODLE_DATABASE_USER=bn_moodle
+      - MOODLE_DATABASE_NAME=moodle
+      - MOODLE_DATABASE_PASSWORD=changeit
+    ports:
+      - '80'
+      - '443'
+    volumes:
+      - 'moodle_data:/bitnami'
+    depends_on:
+      - mariadb
+volumes:
+  mariadb_data:
+    driver: local
+  moodle_data:
+    driver: local
